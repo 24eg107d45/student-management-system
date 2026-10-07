@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Skill & Internship Management System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Official Institutional Topbar -->
+  <div class="official-topbar">
+    <span>🏛️ <strong>INSTITUTION TRAINING & PLACEMENT CELL (TPO)</strong> &bull; Student Career & Skill Registry</span>
+    <span>Database: MySQL &bull; Layered Architecture</span>
+  </div>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="navbar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div>
+          <h1>Student Skill & Internship Management</h1>
+          <span>Official Portal &bull; Anurag University &bull; AIML & CSE</span>
+        </div>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><button class="active" onclick="switchTab('dashboard')">📊 Dashboard</button></li>
+          <li><button onclick="switchTab('students')">👨‍🎓 Students</button></li>
+          <li><button onclick="switchTab('internships')">💼 Internships</button></li>
+          <li><button id="nav-profile-btn" onclick="switchTab('profile')" style="display:none;">🔍 Profile View</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon icon-blue">👨‍🎓</div>
+          <div class="stat-info">
+            <h3 id="stat-students">0</h3>
+            <p>Total Registered Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-green">⚡</div>
+          <div class="stat-info">
+            <h3 id="stat-tech-skills">0</h3>
+            <p>Technical Skills</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-purple">💡</div>
+          <div class="stat-info">
+            <h3 id="stat-soft-skills">0</h3>
+            <p>Soft Skills</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-yellow">🚀</div>
+          <div class="stat-info">
+            <h3 id="stat-active-internships">0</h3>
+            <p>Ongoing Internships</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-blue">📜</div>
+          <div class="stat-info">
+            <h3 id="stat-certifications">0</h3>
+            <p>Certifications Earned</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-green">💻</div>
+          <div class="stat-info">
+            <h3 id="stat-projects">0</h3>
+            <p>Academic Projects</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Quick Student Directory</h2>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="exportStudentsCSV()">📥 Export (CSV)</button>
+            <button class="btn btn-primary" onclick="openStudentModal()">+ Register Student</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Roll / USN</th>
+                  <th>Student Name</th>
+                  <th>Department</th>
+                  <th>Semester</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-students-body">
+                <tr><td colspan="7" style="text-align:center;">Loading students...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: STUDENTS DIRECTORY -->
+    <section id="tab-students" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Student Records Registry</h2>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="exportStudentsCSV()">📥 Export CSV</button>
+            <button class="btn btn-primary" onclick="openStudentModal()">+ Register Student</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="toolbar">
+            <div class="search-box">
+              <input type="text" id="student-search-input" placeholder="Search by Student Name or Roll Number..." oninput="handleStudentSearch()">
+            </div>
+            <div style="min-width: 180px;">
+              <select id="department-filter" onchange="handleStudentSearch()">
+                <option value="">All Departments</option>
+                <option value="aiml">AIML</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Science">Information Science</option>
+                <option value="Electronics & Comm">Electronics & Comm</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil">Civil</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Roll / USN</th>
+                  <th>Full Name</th>
+                  <th>Department</th>
+                  <th>Semester</th>
+                  <th>Email</th>
+                  <th>Skills</th>
+                  <th>Internships</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <tr><td colspan="8" style="text-align:center;">Loading records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: INTERNSHIPS OVERVIEW -->
+    <section id="tab-internships" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Placement & Internship Registry (Official Records)</h2>
+          <button class="btn btn-secondary" onclick="exportInternshipsCSV()">📥 Export Placements (CSV)</button>
+        </div>
+        <div class="card-body">
+          <div class="toolbar">
+            <div class="search-box">
+              <input type="text" id="internship-search-input" placeholder="Filter by company, role, or student name..." oninput="filterInternshipTable()">
+            </div>
+            <div style="min-width: 180px;">
+              <select id="internship-status-filter" onchange="filterInternshipTable()">
+                <option value="">All Statuses</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Offered">Offered</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Company</th>
+                  <th>Role</th>
+                  <th>Student Name</th>
+                  <th>Roll Number</th>
+                  <th>Mode</th>
+                  <th>Duration</th>
+                  <th>Stipend</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="internships-table-body">
+                <tr><td colspan="8" style="text-align:center;">Loading internships...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: INDIVIDUAL STUDENT PROFILE & PORTFOLIO -->
+    <section id="tab-profile" class="tab-content">
+      <div id="profile-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==============================================
+       MODALS WITH RESPONSIVE 2-COLUMN LAYOUTS
+       ============================================== -->
+
+  <!-- MODAL 1: REGISTER / EDIT STUDENT -->
+  <div id="modal-student" class="modal" onclick="handleBackdropClick(event, 'modal-student')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="student-modal-title">Register New Student</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-student')" title="Close">&times;</button>
+      </div>
+      <form id="student-form" onsubmit="handleSaveStudent(event)">
+        <div class="modal-body">
+          <input type="hidden" id="student-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="student-name" class="form-control" required placeholder="e.g. Umesh Reddy">
+            </div>
+            <div class="form-group">
+              <label>Roll Number / USN *</label>
+              <input type="text" id="student-roll" class="form-control" required placeholder="e.g. 24eg107d45">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="student-email" class="form-control" required placeholder="e.g. umesh@anurag.edu.in">
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" id="student-phone" class="form-control" placeholder="e.g. +91 9876543210">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Department / Branch</label>
+              <input type="text" id="student-dept" class="form-control" placeholder="e.g. AIML, CSE">
+            </div>
+            <div class="form-group">
+              <label>Semester</label>
+              <input type="number" id="student-semester" class="form-control" min="1" max="8" value="5">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-student')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD SKILL -->
+  <div id="modal-skill" class="modal" onclick="handleBackdropClick(event, 'modal-skill')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Skill</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-skill')" title="Close">&times;</button>
+      </div>
+      <form id="skill-form" onsubmit="handleAddSkill(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Skill Name *</label>
+            <input type="text" id="skill-name" class="form-control" required placeholder="e.g. Java, Spring Boot, Communication">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="skill-category" class="form-control" required>
+                <option value="Technical">Technical</option>
+                <option value="Soft">Soft</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Proficiency Level *</label>
+              <select id="skill-level" class="form-control" required>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate" selected>Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Expert">Expert</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-skill')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Skill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADD INTERNSHIP (COMPACT 2-COLUMN WITH ALWAYS-VISIBLE FOOTER) -->
+  <div id="modal-internship" class="modal" onclick="handleBackdropClick(event, 'modal-internship')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Internship Record</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-internship')" title="Close">&times;</button>
+      </div>
+      <form id="internship-form" onsubmit="handleAddInternship(event)">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Company Name *</label>
+              <input type="text" id="intern-company" class="form-control" required placeholder="e.g. Microsoft, Infosys, Startup">
+            </div>
+            <div class="form-group">
+              <label>Role / Position *</label>
+              <input type="text" id="intern-role" class="form-control" required placeholder="e.g. Backend Developer Intern">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Work Mode</label>
+              <select id="intern-mode" class="form-control">
+                <option value="Remote">Remote</option>
+                <option value="Onsite">Onsite</option>
+                <option value="Hybrid" selected>Hybrid</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="intern-status" class="form-control">
+                <option value="Ongoing" selected>Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Offered">Offered</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Date</label>
+              <input type="date" id="intern-start" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>End Date</label>
+              <input type="date" id="intern-end" class="form-control">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Stipend</label>
+              <input type="text" id="intern-stipend" class="form-control" placeholder="e.g. ₹25,000 / month">
+            </div>
+            <div class="form-group">
+              <label>Supervisor / Mentor Name</label>
+              <input type="text" id="intern-supervisor" class="form-control" placeholder="e.g. Dr. Rajesh Kumar">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-internship')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Internship</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD CERTIFICATION -->
+  <div id="modal-cert" class="modal" onclick="handleBackdropClick(event, 'modal-cert')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Certification</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-cert')" title="Close">&times;</button>
+      </div>
+      <form id="cert-form" onsubmit="handleAddCert(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Certificate Title *</label>
+            <input type="text" id="cert-title" class="form-control" required placeholder="e.g. AWS Certified Cloud Practitioner">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Issuing Organization</label>
+              <input type="text" id="cert-org" class="form-control" placeholder="e.g. AWS, Coursera, Oracle">
+            </div>
+            <div class="form-group">
+              <label>Issue Date</label>
+              <input type="date" id="cert-date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Credential Verification URL</label>
+            <input type="url" id="cert-url" class="form-control" placeholder="https://www.credly.com/...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-cert')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Certification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ADD PROJECT -->
+  <div id="modal-project" class="modal" onclick="handleBackdropClick(event, 'modal-project')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Academic Project</h3>
+        <button type="button" class="modal-close" onclick="closeModal('modal-project')" title="Close">&times;</button>
+      </div>
+      <form id="project-form" onsubmit="handleAddProject(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Project Title *</label>
+            <input type="text" id="proj-title" class="form-control" required placeholder="e.g. Student Skill & Internship Management System">
+          </div>
+          <div class="form-group">
+            <label>Technologies Used</label>
+            <input type="text" id="proj-tech" class="form-control" placeholder="e.g. Spring Boot, MySQL, REST API, HTML/CSS">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="proj-desc" class="form-control" rows="3" placeholder="Brief project summary, objectives, and architecture..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Project / GitHub URL</label>
+            <input type="url" id="proj-url" class="form-control" placeholder="https://github.com/...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-project')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

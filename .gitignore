@@ -1,0 +1,6 @@
+﻿target/
+*.log
+*.exe
+.vscode/
+*.txt
+*.bat
