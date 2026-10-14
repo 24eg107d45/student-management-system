@@ -1,45 +1,72 @@
-# Student Skill & Internship Management System - Frontend
+# Student Management System - React Frontend ⚛️
 
-Modern, responsive Single-Page Application (SPA) designed to interface with the Spring Boot backend REST APIs for academic skill and internship tracking.
-
----
-
-## 🌟 Frontend Features
-
-- **Dashboard KPI Analytics:** Real-time summary cards for total registered students, technical skills, soft skills, active internships, and certifications.
-- **Students Directory:** Dynamic search by Student Name or Roll Number / USN, with real-time department filtering.
-- **Interactive Student Profiles:** Tabbed modal view allowing 1-click addition of Skills, Internships, Certifications, and Academic Projects.
-- **Data Export & Printing:**
-  - 1-Click CSV export of student and placement records.
-  - Printable official Student Bio-Data / Resume formatting.
-- **Responsive Design:** Optimized for both mobile devices and desktop screens using modern CSS Flexbox and Grid.
+This is the modern **React (Single Page Application)** frontend for the **Student Skill & Internship Management System**, built with **Vite**, **React 18**, and **Lucide Icons**.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Features
 
-- **HTML5:** Semantic markup with modal dialogs and form validation.
-- **CSS3:** Modern design system utilizing CSS variables, responsive layouts, glassmorphism card designs, and toast notifications.
-- **JavaScript (ES6+):** Vanilla JavaScript using `fetch` API for asynchronous REST communication, dynamic DOM manipulation, and client-side filtering.
-- **FontAwesome:** Iconography for enhanced visual communication.
+- **Executive Analytics Dashboard**:
+  - Live metric cards (Enrolled Students, Skills Logged, Internships Secured, Global Certifications, Academic Projects).
+  - Department distribution progress bars.
+  - Quick recent students table.
+- **Interactive Student Directory**:
+  - Real-time search across student names, roll numbers, and emails.
+  - Department filtering (CSE, AIML, IT, ECE, EEE, MECH, CIVIL) and Year-of-Study filtering.
+  - 1-Click CSV export of student data.
+- **Comprehensive Student Profile Portfolio**:
+  - **Technical Skills**: Proficiency badges (Beginner, Intermediate, Advanced, Expert) and faculty verification tags.
+  - **Corporate Internships**: Company, role, duration, stipend, and credentials.
+  - **Global Certifications**: Title, issuing organization, dates, and verification links.
+  - **Academic Projects**: Title, tech stack tags, live GitHub/demo links, and descriptions.
+  - **Printable Bio-Data / Resume**: Clean 1-click printable resume format for placements.
 
 ---
 
-## 📂 Project Structure
+## 🛠️ Quick Start
 
-```text
-student-management-frontend/
-├── css/
-│   └── styles.css       # Full styling and responsive layouts
-├── js/
-│   └── app.js           # Asynchronous REST API consumer & DOM logic
-├── index.html           # Main Single-Page Application
-└── README.md            # Frontend documentation
+### 1. Install Dependencies
+```bash
+cd frontend
+npm install
 ```
 
+### 2. Run the Development Server
+```bash
+npm run dev
+```
+The React development server runs at `http://localhost:5173`.
+All API requests to `/api/*` are automatically proxied to the Spring Boot backend running on `http://localhost:8080`.
+
+### 3. Production Build
+```bash
+npm run build
+```
+Creates an optimized production bundle inside the `dist/` folder.
+
 ---
 
-## 🚀 How to Run
+## 📁 Project Structure
 
-1. Open `index.html` directly in any modern web browser (Chrome, Edge, Firefox).
-2. Ensure the Spring Boot backend server is running on `http://localhost:8080` (or configured to the live cloud URL).
+```text
+frontend/
+├── index.html                 # HTML entry point
+├── package.json               # NPM scripts and dependencies
+├── vite.config.js             # Vite build & proxy configuration
+└── src/
+    ├── main.jsx               # React DOM bootstrap
+    ├── App.jsx                # Main application state and routing
+    ├── index.css              # Custom responsive styles and print CSS
+    ├── services/
+    │   └── api.js             # REST API client connecting to Spring Boot
+    └── components/
+        ├── Navbar.jsx         # Sticky navigation header
+        ├── Dashboard.jsx      # Metrics and department analytics
+        ├── StudentList.jsx    # Searchable directory with CSV export
+        ├── StudentProfile.jsx # Student details and portfolio tabs
+        ├── StudentModal.jsx   # Add/Edit student form
+        ├── SkillModal.jsx     # Add skill modal
+        ├── InternshipModal.jsx# Add internship modal
+        ├── CertificationModal.jsx # Add certification modal
+        └── ProjectModal.jsx   # Add project modal
+```
