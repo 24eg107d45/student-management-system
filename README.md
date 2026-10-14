@@ -50,25 +50,30 @@ A full-stack web application designed for academic institutions to centralize, t
 
 ```text
 student-management-system/
-├── src/
+├── frontend/                    # Dedicated Frontend Folder
+│   ├── index.html               # Single-Page Application (SPA)
+│   ├── css/
+│   │   └── styles.css           # Responsive Design & UI Component Styles
+│   ├── js/
+│   │   └── app.js               # Dynamic REST API Consumer & Form Logic
+│   └── README.md                # Frontend Documentation & Setup Guide
+├── src/                         # Backend (Java & Spring Boot)
 │   ├── main/
 │   │   ├── java/com/student/management/
-│   │   │   ├── controller/      # REST API Endpoints
+│   │   │   ├── config/          # Startup Auto-Seeder (DataInitializer)
+│   │   │   ├── controller/      # REST API Controllers (@RestController)
 │   │   │   ├── entity/          # JPA Entities (Student, Skill, Internship, etc.)
-│   │   │   ├── exception/       # Global Exception Handler
-│   │   │   ├── repository/     # Spring Data JPA Interfaces
+│   │   │   ├── exception/       # Global Exception Handling
+│   │   │   ├── repository/     # Spring Data JPA Repositories
 │   │   │   ├── service/         # Business Logic Layer
 │   │   │   └── StudentManagementApplication.java
 │   │   └── resources/
-│   │       ├── static/          # Full-Stack Frontend (HTML, CSS, JS)
-│   │       │   ├── index.html
-│   │       │   ├── styles.css
-│   │       │   └── app.js
+│   │       ├── static/          # Bundled web assets for production
 │   │       ├── application.properties
 │   │       └── application-cloud.properties
 ├── Dockerfile                   # Cloud multi-stage container build
-├── pom.xml                      # Maven dependencies
-└── README.md
+├── pom.xml                      # Maven project dependencies
+└── README.md                    # Main Project Documentation
 ```
 
 ---
