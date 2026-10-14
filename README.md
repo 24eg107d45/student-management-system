@@ -52,27 +52,18 @@ A full-stack web application designed for academic institutions to centralize, t
 student-management-system/
 ├── frontend/                    # Dedicated Frontend Folder
 │   ├── index.html               # Single-Page Application (SPA)
-│   ├── css/
-│   │   └── styles.css           # Responsive Design & UI Component Styles
-│   ├── js/
-│   │   └── app.js               # Dynamic REST API Consumer & Form Logic
+│   ├── css/styles.css           # Responsive Design & UI Component Styles
+│   ├── js/app.js                # Dynamic REST API Consumer & Form Logic
 │   └── README.md                # Frontend Documentation & Setup Guide
-├── src/                         # Backend (Java & Spring Boot)
-│   ├── main/
-│   │   ├── java/com/student/management/
-│   │   │   ├── config/          # Startup Auto-Seeder (DataInitializer)
-│   │   │   ├── controller/      # REST API Controllers (@RestController)
-│   │   │   ├── entity/          # JPA Entities (Student, Skill, Internship, etc.)
-│   │   │   ├── exception/       # Global Exception Handling
-│   │   │   ├── repository/     # Spring Data JPA Repositories
-│   │   │   ├── service/         # Business Logic Layer
-│   │   │   └── StudentManagementApplication.java
-│   │   └── resources/
-│   │       ├── static/          # Bundled web assets for production
-│   │       ├── application.properties
-│   │       └── application-cloud.properties
+├── backend/                     # Dedicated Backend Folder
+│   ├── src/                     # Java Source Code & Configuration
+│   │   ├── main/java/           # Controllers, Services, Repositories, Entities
+│   │   └── main/resources/      # Application properties & configs
+│   ├── pom.xml                  # Maven Build Descriptor
+│   └── README.md                # Backend REST API & Architecture Documentation
+├── src/                         # Production Source Tree (for Maven & Docker builds)
 ├── Dockerfile                   # Cloud multi-stage container build
-├── pom.xml                      # Maven project dependencies
+├── pom.xml                      # Root Maven project build file
 └── README.md                    # Main Project Documentation
 ```
 
