@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import StudentList from './components/StudentList';
 import StudentProfile from './components/StudentProfile';
+import AuthPage from './components/AuthPage';
 import StudentModal from './components/StudentModal';
 import SkillModal from './components/SkillModal';
 import InternshipModal from './components/InternshipModal';
@@ -12,6 +13,16 @@ import { api } from './services/api';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('studenthub_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'students' | 'profile'
   const [stats, setStats] = useState(null);
   const [students, setStudents] = useState([]);
@@ -30,6 +41,23 @@ export default function App() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
+  };
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    try {
+      localStorage.setItem('studenthub_user', JSON.stringify(user));
+    } catch (e) {}
+    showToast(`Welcome, ${user.name}!`);
+    setActiveTab('dashboard');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('studenthub_user');
+    } catch (e) {}
+    showToast('Signed out successfully.');
   };
 
   const loadInitialData = async () => {
@@ -59,9 +87,7 @@ export default function App() {
     try {
       const updated = await api.getStudentById(studentId);
       setSelectedStudent(updated);
-      // update in students list as well
       setStudents(prev => prev.map(s => s.id === studentId ? updated : s));
-      // update stats
       api.getStats().then(setStats).catch(() => {});
     } catch (error) {
       showToast('Failed to refresh student profile: ' + error.message, 'error');
@@ -69,8 +95,10 @@ export default function App() {
   };
 
   useEffect(() => {
-    loadInitialData();
-  }, []);
+    if (currentUser) {
+      loadInitialData();
+    }
+  }, [currentUser]);
 
   // --- Student Actions ---
   const handleOpenAddStudent = () => {
@@ -122,7 +150,6 @@ export default function App() {
   const handleSelectStudent = (student) => {
     setSelectedStudent(student);
     setActiveTab('profile');
-    // Ensure fresh profile details
     refreshStudentProfile(student.id);
   };
 
@@ -222,19 +249,44 @@ export default function App() {
     }
   };
 
+  // If user is not authenticated, render Login/Sign-Up page
+  if (!currentUser) {
+    return (
+      <>
+        <AuthPage onLogin={handleLogin} />
+        {toast && (
+          <div className="toast-container no-print">
+            <div className={`toast ${toast.type}`}>
+              {toast.type === 'error' ? (
+                <AlertCircle size={20} color="var(--danger)" />
+              ) : (
+                <CheckCircle2 size={20} color="var(--success)" />
+              )}
+              <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{toast.message}</span>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="app-container">
+      <div className="ambient-bg" />
+
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onAddStudent={handleOpenAddStudent}
         studentCount={students.length}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       <main className="main-content">
         {loading && (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--gray-500)' }}>
-            Loading student records & analytics...
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>Loading academic analytics & student matrix...</div>
           </div>
         )}
 
@@ -244,6 +296,8 @@ export default function App() {
             students={students}
             onSelectStudent={handleSelectStudent}
             onViewAllStudents={() => setActiveTab('students')}
+            onAddStudent={handleOpenAddStudent}
+            currentUser={currentUser}
           />
         )}
 
@@ -254,6 +308,7 @@ export default function App() {
             onAddStudent={handleOpenAddStudent}
             onEditStudent={handleOpenEditStudent}
             onDeleteStudent={handleDeleteStudent}
+            currentUser={currentUser}
           />
         )}
 
@@ -270,6 +325,7 @@ export default function App() {
             onDeleteCert={handleDeleteCertification}
             onOpenProjectModal={() => setIsProjectModalOpen(true)}
             onDeleteProject={handleDeleteProject}
+            currentUser={currentUser}
           />
         )}
       </main>
@@ -306,7 +362,7 @@ export default function App() {
         onSubmit={handleAddProject}
       />
 
-      {/* Floating Toast Notification */}
+      {/* Toast Notification */}
       {toast && (
         <div className="toast-container no-print">
           <div className={`toast ${toast.type}`}>
@@ -315,7 +371,7 @@ export default function App() {
             ) : (
               <CheckCircle2 size={20} color="var(--success)" />
             )}
-            <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{toast.message}</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{toast.message}</span>
           </div>
         </div>
       )}
