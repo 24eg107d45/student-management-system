@@ -1,7 +1,9 @@
+// API Client for Student Management System
+// Seamlessly connects to localhost:8080 in local dev, and Render backend when deployed on Netlify
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 
-  (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '5173' 
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost'
     ? 'http://localhost:8080' 
-    : '');
+    : 'https://student-management-system-yhm5.onrender.com');
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;

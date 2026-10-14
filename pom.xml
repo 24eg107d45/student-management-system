@@ -40,12 +40,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- H2 In-Memory/File Database for Zero-Config Cloud Deployment -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 
 		<!-- Spring Boot DevTools for hot reloads -->
 		<dependency>
